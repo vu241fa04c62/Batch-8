@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Hospital System</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI', sans-serif;
+}
+
+body{
+  background:#0f172a;
+  color:white;
+}
+
+/* LOGIN */
+#login{
+  position:fixed;
+  width:100%;
+  height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#1e3c72,#2a5298);
+}
+
+.login-box{
+  background:white;
+  color:black;
+  padding:30px;
+  border-radius:10px;
+  text-align:center;
+}
+
+input{
+  display:block;
+  margin:10px auto;
+  padding:10px;
+  width:220px;
+}
+
+button{
+  padding:10px 20px;
+  background:#0072ff;
+  color:white;
+  border:none;
+  cursor:pointer;
+}
+
+/* MAIN */
+.main{
+  display:flex;
+}
+
+/* SIDEBAR */
+.sidebar{
+  width:220px;
+  background:#020617;
+  height:100vh;
+  padding:20px;
+  position:fixed;
+}
+
+.sidebar div{
+  padding:10px;
+  cursor:pointer;
+}
+
+.sidebar div:hover{
+  background:#1e293b;
+}
+
+/* CONTENT */
+.content{
+  margin-left:220px;
+  padding:20px;
+  width:100%;
+}
+
+.section{display:none;}
+.section.active{display:block;}
+
+/* TABLE */
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th,td{
+  padding:10px;
+  border:1px solid gray;
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- LOGIN PAGE -->
+<div id="login">
+  <div class="login-box">
+    <h2>Hospital Login</h2>
+    <input id="username" placeholder="Username">
+    <input id="password" type="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" style="display:none;" class="main">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <h3>Hospital</h3>
+    <div onclick="show('dashboard')">Dashboard</div>
+    <div onclick="show('patients')">Patients</div>
+    <div onclick="show('doctors')">Doctors</div>
+    <div onclick="show('appointments')">Appointments</div>
+    <div onclick="show('pharmacy')">Pharmacy</div>
+    <div onclick="show('analytics')">Analytics</div>
+    <div onclick="show('contact')">Contact</div>
+    <div onclick="logout()">Logout</div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <h1 id="welcome"></h1>
+
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="section active">
+      <h2>Dashboard</h2>
+      <p>Total Patients: 1200</p>
+      <p>Appointments Today: 85</p>
+    </div>
+
+    <!-- PATIENTS -->
+    <div id="patients" class="section">
+      <h2>Patient Details</h2>
+      <table>
+        <tr><th>Name</th><th>Age</th><th>Disease</th><th>Doctor</th></tr>
+        <tr><td>Ravi</td><td>32</td><td>Fever</td><td>Dr. Kumar</td></tr>
+        <tr><td>Sita</td><td>28</td><td>Diabetes</td><td>Dr. Rao</td></tr>
+        <tr><td>Arjun</td><td>40</td><td>Cold</td><td>Dr. Reddy</td></tr>
+      </table>
+    </div>
+
+    <!-- DOCTORS -->
+    <div id="doctors" class="section">
+      <h2>Doctors</h2>
+      <p>Dr. Kumar - General</p>
+      <p>Dr. Rao - Diabetes</p>
+      <p>Dr. Reddy - ENT</p>
+    </div>
+
+    <!-- APPOINTMENTS -->
+    <div id="appointments" class="section">
+      <h2>Appointments</h2>
+      <p>Ravi - 10:00 AM</p>
+      <p>Sita - 11:30 AM</p>
+    </div>
+
+    <!-- PHARMACY -->
+    <div id="pharmacy" class="section">
+      <h2>Pharmacy</h2>
+      <p>Paracetamol - Available</p>
+      <p>Insulin - Available</p>
+    </div>
+
+    <!-- ANALYTICS -->
+    <div id="analytics" class="section">
+      <h2>Analytics</h2>
+      <progress value="70" max="100"></progress>
+    </div>
+
+    <!-- CONTACT -->
+    <div id="contact" class="section">
+      <h2>Contact</h2>
+      <input placeholder="Name"><br>
+      <input placeholder="Email"><br>
+      <button>Send</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+
+/* USERS */
+const users=[
+  {username:"admin",password:"1234"},
+  {username:"doctor",password:"doc123"}
+];
+
+/* LOGIN */
+function login(){
+  let u=username.value;
+  let p=password.value;
+
+  let valid=users.find(x=>x.username===u && x.password===p);
+
+  if(valid){
+    localStorage.setItem("user",u);
+    document.getElementById("login").style.display="none";
+    document.getElementById("app").style.display="flex";
+    document.getElementById("welcome").innerText="Welcome "+u;
+  }else{
+    alert("Invalid Login");
+  }
+}
+
+/* AUTO LOGIN */
+window.onload=function(){
+  let u=localStorage.getItem("user");
+  if(u){
+    login.style.display="none";
+    app.style.display="flex";
+    welcome.innerText="Welcome "+u;
+  }
+}
+
+/* NAVIGATION */
+function show(id){
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+/* LOGOUT */
+function logout(){
+  localStorage.clear();
+  location.reload();
+}
+
+</script>
+
+</body>
+</html>
